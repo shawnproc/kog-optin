@@ -506,8 +506,6 @@
 
       if (!valid) return;
 
-      // ── POST TO GHL WEBHOOK ──
-      // Replace YOUR_GHL_WEBHOOK_URL with your actual GHL webhook endpoint
       const payload = {
         firstName,
         lastName,
@@ -519,16 +517,11 @@
         timestamp: new Date().toISOString()
       };
 
-      // Swap this URL for your real GHL webhook
-      const GHL_WEBHOOK = 'YOUR_GHL_WEBHOOK_URL';
-
-      if (GHL_WEBHOOK !== 'YOUR_GHL_WEBHOOK_URL') {
-        fetch(GHL_WEBHOOK, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }).catch(err => console.error('Webhook error:', err));
-      }
+      fetch('https://kognite-uyub.vercel.app/api/forms/optin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(err => console.error('Submission error:', err));
 
       form.style.display = 'none';
       successState.style.display = 'block';
