@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMS Opt-In | Keystone Operations Group</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --oxblood: #6B1E1E;
+      --oxblood-dark: #4E1515;
+      --teal: #1B5C6B;
+      --teal-light: #22737F;
+      --offwhite: #F5F3F0;
+      --charcoal: #1C1C1C;
+      --mid: #555;
+      --border: #D8D4CF;
+      --success: #2E7D52;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--offwhite);
+      color: var(--charcoal);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--charcoal);
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 3px solid var(--oxblood);
+    }
+
+    .logo-mark {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .brand-sub {
+      font-size: 0.65rem;
+      color: #999;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* ── HERO BAND ── */
+    .hero-band {
+      background: var(--teal);
+      padding: 36px 40px 32px;
+      text-align: center;
+    }
+
+    .hero-band h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .hero-band p {
+      margin-top: 10px;
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.78);
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    /* ── FORM CARD ── */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 48px 20px 64px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--oxblood);
+      max-width: 560px;
+      width: 100%;
+      padding: 40px 40px 36px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+
+    .card-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--oxblood);
+      margin-bottom: 6px;
+    }
+
+    .card h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      letter-spacing: 0.02em;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── FORM FIELDS ── */
+    .field-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--mid);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    label .req { color: var(--oxblood); margin-left: 2px; }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"] {
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 11px 14px;
+      font-size: 0.93rem;
+      font-family: 'Inter', sans-serif;
+      color: var(--charcoal);
+      background: var(--offwhite);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(27,92,107,0.12);
+      background: #fff;
+    }
+
+    /* ── CONSENT BLOCKS ── */
+    .consent-section {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .consent-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 4px;
+    }
+
+    .consent-box {
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 16px 18px;
+      background: var(--offwhite);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      position: relative;
+    }
+
+    .consent-box:has(input:checked) {
+      border-color: var(--teal);
+      background: rgba(27,92,107,0.05);
+    }
+
+    .consent-box label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      text-transform: none;
+      letter-spacing: normal;
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: var(--charcoal);
+      line-height: 1.5;
+    }
+
+    .consent-box input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      accent-color: var(--teal);
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    .consent-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin-bottom: 4px;
+    }
+
+    .tag-care { background: var(--teal); color: #fff; }
+    .tag-promo { background: var(--oxblood); color: #fff; }
+
+    .consent-desc {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--mid);
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    /* ── LEGAL FOOTER ── */
+    .legal-note {
+      margin-top: 20px;
+      padding: 14px 16px;
+      background: #F9F7F5;
+      border-left: 3px solid var(--border);
+      border-radius: 2px;
+      font-size: 0.75rem;
+      color: var(--mid);
+      line-height: 1.6;
+    }
+
+    .legal-note a {
+      color: var(--teal);
+      text-decoration: underline;
+    }
+
+    /* ── SUBMIT ── */
+    .submit-btn {
+      margin-top: 28px;
+      width: 100%;
+      background: var(--oxblood);
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 14px 24px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .submit-btn:hover { background: var(--oxblood-dark); }
+    .submit-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+    /* ── SUCCESS STATE ── */
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .success-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .success-icon svg { stroke: #fff; }
+
+    .success-state h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 10px;
+    }
+
+    .success-state p {
+      font-size: 0.88rem;
+      color: var(--mid);
+      line-height: 1.6;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    /* ── ERROR ── */
+    .error-msg {
+      font-size: 0.75rem;
+      color: #c0392b;
+      margin-top: 4px;
+      display: none;
+    }
+
+    input.invalid { border-color: #c0392b; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--charcoal);
+      padding: 18px 40px;
+      text-align: center;
+      font-size: 0.72rem;
+      color: #666;
+    }
+
+    footer a { color: #888; text-decoration: underline; }
+
+    @media (max-width: 480px) {
+      header { padding: 16px 20px; }
+      .hero-band { padding: 28px 20px; }
+      .card { padding: 28px 20px 24px; }
+      .field-group { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <svg class="logo-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="40" height="40" fill="#1B5C6B"/>
+      <path d="M10 8 L10 32 M10 20 L22 8 M10 20 L24 32" stroke="#fff" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
+    </svg>
+    <div>
+      <div class="brand-name">Keystone Operations Group</div>
+      <div class="brand-sub">SMS Communications</div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero-band">
+    <h1>Stay Connected With KOG</h1>
+    <p>Opt in below to receive SMS messages from Keystone Operations Group. You control what you receive — select only what applies to you.</p>
+  </div>
+
+  <!-- MAIN FORM -->
+  <main>
+    <div class="card">
+      <div class="card-eyebrow">SMS Opt-In Form</div>
+      <h2>Choose Your Message Preferences</h2>
+
+      <form id="optInForm" novalidate>
+
+        <div class="field-group">
+          <div class="field">
+            <label for="firstName">First Name <span class="req">*</span></label>
+            <input type="text" id="firstName" name="firstName" placeholder="Rashawn" autocomplete="given-name" />
+            <span class="error-msg" id="err-firstName">First name is required.</span>
+          </div>
+          <div class="field">
+            <label for="lastName">Last Name <span class="req">*</span></label>
+            <input type="text" id="lastName" name="lastName" placeholder="Smith" autocomplete="family-name" />
+            <span class="error-msg" id="err-lastName">Last name is required.</span>
+          </div>
+          <div class="field full">
+            <label for="phone">Mobile Phone Number <span class="req">*</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="+1 (540) 000-0000" autocomplete="tel" />
+            <span class="error-msg" id="err-phone">A valid US mobile number is required.</span>
+          </div>
+          <div class="field full">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
+          </div>
+        </div>
+
+        <!-- CONSENT BLOCKS -->
+        <div class="consent-section">
+          <div class="consent-label">Select the messages you agree to receive <span class="req">*</span></div>
+
+          <div class="consent-box">
+            <label>
+              <input type="checkbox" id="consentCare" name="consentCare" />
+              <div>
+                <span class="consent-tag tag-care">Customer Care</span>
+                <span class="consent-desc">
+                  I agree to receive customer support messages from Keystone Operations Group LLC, including responses to inquiries, ticket updates, appointment coordination, and follow-up communications submitted via this website. Msg frequency varies. Msg &amp; data rates may apply. Reply STOP to unsubscribe, HELP for help.
+                </span>
+              </div>
+            </label>
+          </div>
+
+          <div class="consent-box">
+            <label>
+              <input type="checkbox" id="consentMarketing" name="consentMarketing" />
+              <div>
+                <span class="consent-tag tag-promo">Promotional</span>
+                <span class="consent-desc">
+                  I agree to receive promotional messages from Keystone Operations Group LLC, including special offers, service announcements, and business automation plan promotions. This consent is separate from customer care consent. Msg frequency varies. Msg &amp; data rates may apply. Reply STOP to unsubscribe, HELP for help.
+                </span>
+              </div>
+            </label>
+          </div>
+
+          <span class="error-msg" id="err-consent" style="display:none;">Please select at least one message type.</span>
+        </div>
+
+        <!-- LEGAL -->
+        <div class="legal-note">
+          By submitting this form, you agree to receive SMS messages from <strong>Keystone Operations Group LLC</strong> at the mobile number provided. Consent is not a condition of any purchase. Message and data rates may apply. Message frequency varies. You may opt out at any time by replying <strong>STOP</strong>. For assistance, reply <strong>HELP</strong> or email <a href="mailto:info@keystoneoperationsgroup.net">info@keystoneoperationsgroup.net</a>. View our <a href="https://keystoneoperationsgroup.net/privacy.html" target="_blank">Privacy Policy</a> and <a href="https://keystoneoperationsgroup.net/terms.html" target="_blank">Terms of Service</a>. We do not sell, rent, or share your information with third parties.
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Submit &amp; Confirm Opt-In</button>
+      </form>
+
+      <!-- SUCCESS STATE -->
+      <div class="success-state" id="successState">
+        <div class="success-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h3>You're Opted In</h3>
+        <p>You'll receive a confirmation text shortly. Reply STOP at any time to unsubscribe. Thank you for connecting with Keystone Operations Group.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2026 Keystone Operations Group LLC &nbsp;|&nbsp;
+    <a href="https://keystoneoperationsgroup.net/privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
+    <a href="https://keystoneoperationsgroup.net/terms.html">Terms of Service</a> &nbsp;|&nbsp;
+    <a href="https://keystoneoperationsgroup.net">keystoneoperationsgroup.net</a>
+  </footer>
+
+  <script>
+    const form = document.getElementById('optInForm');
+    const successState = document.getElementById('successState');
+
+    function showError(id, show) {
+      const el = document.getElementById(id);
+      if (el) el.style.display = show ? 'block' : 'none';
+    }
+
+    function markInvalid(id, invalid) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('invalid', invalid);
+    }
+
+    function isValidPhone(val) {
+      return /^[\+\d][\d\s\-\(\)]{9,}$/.test(val.trim());
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      let valid = true;
+
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName  = document.getElementById('lastName').value.trim();
+      const phone     = document.getElementById('phone').value.trim();
+      const care      = document.getElementById('consentCare').checked;
+      const promo     = document.getElementById('consentMarketing').checked;
+
+      if (!firstName) { showError('err-firstName', true); markInvalid('firstName', true); valid = false; }
+      else            { showError('err-firstName', false); markInvalid('firstName', false); }
+
+      if (!lastName)  { showError('err-lastName', true); markInvalid('lastName', true); valid = false; }
+      else            { showError('err-lastName', false); markInvalid('lastName', false); }
+
+      if (!isValidPhone(phone)) { showError('err-phone', true); markInvalid('phone', true); valid = false; }
+      else                      { showError('err-phone', false); markInvalid('phone', false); }
+
+      if (!care && !promo) { showError('err-consent', true); valid = false; }
+      else                 { showError('err-consent', false); }
+
+      if (!valid) return;
+
+      // ── POST TO GHL WEBHOOK ──
+      // Replace YOUR_GHL_WEBHOOK_URL with your actual GHL webhook endpoint
+      const payload = {
+        firstName,
+        lastName,
+        phone,
+        email: document.getElementById('email').value.trim(),
+        consentCustomerCare: care,
+        consentMarketing: promo,
+        optInSource: 'sms-opt-in-page',
+        timestamp: new Date().toISOString()
+      };
+
+      // Swap this URL for your real GHL webhook
+      const GHL_WEBHOOK = 'YOUR_GHL_WEBHOOK_URL';
+
+      if (GHL_WEBHOOK !== 'YOUR_GHL_WEBHOOK_URL') {
+        fetch(GHL_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(err => console.error('Webhook error:', err));
+      }
+
+      form.style.display = 'none';
+      successState.style.display = 'block';
+    });
+
+    // Clear errors on input
+    ['firstName','lastName','phone'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        showError('err-' + id, false);
+        markInvalid(id, false);
+      });
+    });
+  </script>
+
+</body>
+</html>
